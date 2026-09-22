@@ -1,0 +1,5 @@
+sample,n,daily_sd_bp,min_detectable_bp
+Yom Kippur only,68,119.1,40.4
+High Holy Days,137,119.1,28.5
+All yom tov,865,119.1,11.3
+All Jewish holidays,2118,119.1,7.2

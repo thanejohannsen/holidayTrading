@@ -26,6 +26,27 @@ Manning's brilliance is real and worth **+0.048** EPA/dropback. His floor costs
 predict completing a comeback once average efficiency is held constant (odds ratio 0.85,
 95% CI 0.60–1.21).
 
+## Win probability is the wrong yardstick from a deep hole
+
+Worth knowing before reading the Ohio State case study. Win probability is nearly flat
+when a team is down three scores, so nothing a quarterback does there registers:
+
+| A 48-yard gain from… | WP before | WP after | Gain |
+|---|---|---|---|
+| down 20, 17 min left | 8.6% | 8.7% | **+0.1 pts** |
+| down 13, 11.5 min left | 16.9% | 17.8% | +0.9 pts |
+| down 6, 5 min left | 27.0% | 35.6% | +8.6 pts |
+
+Manning's 4th-and-9 conversion (Q3 2:21, down 20) was therefore worth only **+0.8 points**
+of win probability against failing — at 20 down with a quarter left, a punt and a turnover
+on downs are nearly the same outcome. His 4th-and-6 (Q4 11:34, down 13) was worth
+**+3.2 points**, multiplying Texas's chances by 1.27×.
+
+So the comeback needs two currencies. Over the three scoring drives (Q3 5:38 onward),
+Manning produced **47% of the EPA** but only **32% of the win-probability gain** — the gap
+is entirely about *when* each unit's value landed. The season-long leverage results use
+**EPA**, not WPA, and are not subject to this.
+
 ## Running it
 
 ```bash

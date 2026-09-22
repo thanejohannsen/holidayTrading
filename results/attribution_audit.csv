@@ -1,0 +1,5 @@
+season,quarterback,team_plays,team_dropbacks,captured_plays,captured_dropbacks,dropback_coverage,mentioned_not_actor,team_penalty_rows
+2025,Manning,1135,439,513,426,0.9703872437357631,5,83
+2025,Stockton,1256,434,525,401,0.923963133640553,22,58
+2026,Manning,282,110,123,102,0.9272727272727272,1,8
+2026,Stockton,236,82,58,48,0.5853658536585366,12,9

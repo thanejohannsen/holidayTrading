@@ -1,0 +1,445 @@
+<title>Shape of a Quarterback</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{
+  color-scheme:light;
+  --ground:#FBF9F4; --panel:#FFFFFF; --ink:#1B1815; --ink-2:#4A433B; --muted:#6E665C;
+  --rule:#E3DCD0; --rule-soft:#EFEAE1;
+  --tex:#C8620A; --uga:#9E1B45; --tex-soft:#F2E0CC; --uga-soft:#F0D8DF;
+  --pos:#2F6B4F; --neg:#A33A2A;
+  --display:'Oswald',Impact,'Haettenschweiler',sans-serif;
+  --body:'Source Sans 3','Segoe UI',system-ui,sans-serif;
+  --mono:'IBM Plex Mono','SFMono-Regular',Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --ground:#16140F; --panel:#1F1C16; --ink:#F5F1E8; --ink-2:#D3CCBE; --muted:#9A9184;
+  --rule:#332E25; --rule-soft:#262219;
+  --tex:#D07430; --uga:#BE3F80; --tex-soft:#3A2A19; --uga-soft:#331C26;
+  --pos:#6FB58E; --neg:#E08A72;
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#16140F; --panel:#1F1C16; --ink:#F5F1E8; --ink-2:#D3CCBE; --muted:#9A9184;
+  --rule:#332E25; --rule-soft:#262219;
+  --tex:#D07430; --uga:#BE3F80; --tex-soft:#3A2A19; --uga-soft:#331C26;
+  --pos:#6FB58E; --neg:#E08A72;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--body);
+     font-size:16px;line-height:1.6;margin:0}
+.wrap{max-width:1000px;margin:0 auto;padding-inline:20px;padding-block:44px 72px}
+h1,h2,h3,.disp{font-family:var(--display);font-weight:600;letter-spacing:.01em;text-wrap:balance;margin:0}
+h1{font-size:clamp(2.1rem,5.6vw,3.4rem);line-height:1.02;text-transform:uppercase}
+h2{font-size:clamp(1.35rem,3vw,1.7rem);text-transform:uppercase;letter-spacing:.03em}
+h3{font-size:1.02rem;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-2)}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.lede{font-size:1.1rem;color:var(--ink-2);max-width:62ch;margin-top:14px}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header.masthead{border-bottom:3px solid var(--ink);padding-bottom:26px}
+.names{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:baseline;margin-top:18px}
+.name{font-family:var(--display);font-size:1.05rem;text-transform:uppercase;letter-spacing:.05em;
+      display:flex;align-items:center;gap:8px}
+.swatch{width:13px;height:13px;border-radius:2px;display:inline-block}
+
+section{margin-top:56px}
+.sec-head{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;
+          border-bottom:1px solid var(--rule);padding-bottom:10px;margin-bottom:22px}
+.sec-head .tag{font-family:var(--mono);font-size:.68rem;color:var(--muted);letter-spacing:.14em}
+
+.verdict{background:var(--panel);border:1px solid var(--rule);border-left:5px solid var(--tex);
+         padding:22px 24px;margin-top:26px;border-radius:3px}
+.verdict p+p{margin-top:12px}
+.verdict strong{color:var(--ink)}
+
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:1px;
+       background:var(--rule);border:1px solid var(--rule);margin-top:24px;border-radius:3px;overflow:hidden}
+.tile{background:var(--panel);padding:16px 18px}
+.tile .k{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.tile .v{font-family:var(--display);font-size:1.9rem;line-height:1.1;margin-top:6px;font-variant-numeric:tabular-nums}
+.tile .s{font-size:.82rem;color:var(--muted);margin-top:3px}
+
+figure{margin:0}
+.chart{background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:18px 16px 12px;margin-top:8px;overflow-x:auto}
+.chart svg{display:block;width:100%;height:auto}
+/* Below ~700px the viewBox would scale chart labels down to a few pixels, so
+   the chart keeps a legible minimum and scrolls inside its own container
+   instead. The page body still never scrolls sideways. */
+@media (max-width:700px){ .chart>div{min-width:660px} .chart svg{min-width:660px} }
+figcaption{font-size:.86rem;color:var(--muted);margin-top:10px;max-width:70ch}
+.read{margin-top:16px;max-width:66ch}
+.read p+p{margin-top:10px}
+
+table{border-collapse:collapse;width:100%;font-size:.9rem}
+.tablewrap{overflow-x:auto;margin-top:8px;border:1px solid var(--rule);border-radius:3px;background:var(--panel)}
+th,td{padding:9px 13px;text-align:right;border-bottom:1px solid var(--rule-soft);white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-family:var(--mono);font-size:.68rem;letter-spacing:.09em;text-transform:uppercase;
+         color:var(--muted);border-bottom:1px solid var(--rule)}
+tbody tr:last-child td{border-bottom:none}
+td.n{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.win{font-weight:600}
+
+.caveat{background:var(--panel);border:1px solid var(--rule);border-radius:3px;padding:18px 20px;margin-top:14px}
+.caveat li{margin-bottom:9px}
+.caveat li:last-child{margin-bottom:0}
+ul{margin:0;padding-left:20px}
+footer{margin-top:64px;border-top:1px solid var(--rule);padding-top:20px;font-size:.84rem;color:var(--muted)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--muted);margin-top:8px}
+.legend span{display:flex;align-items:center;gap:6px}
+@media (max-width:560px){ .wrap{padding-block:30px 52px} .tile .v{font-size:1.55rem} }
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+<header class="masthead">
+  <p class="eyebrow">Play-by-play study &middot; 2025&ndash;2026 &middot; 1,036 dropbacks</p>
+  <h1>Same production,<br>different shape</h1>
+  <p class="lede">Arch Manning and Gunner Stockton produced almost exactly the same amount per dropback in 2025.
+  How that production arrived could hardly have been more different &mdash; and the difference decides games.</p>
+  <div class="names">
+    <span class="name"><i class="swatch" style="background:var(--tex)"></i>Arch Manning &middot; Texas</span>
+    <span class="name"><i class="swatch" style="background:var(--uga)"></i>Gunner Stockton &middot; Georgia</span>
+  </div>
+</header>
+
+<div class="verdict">
+  <p><strong>The hypothesis was half right.</strong> Manning is measurably the boom-bust quarterback and Stockton the
+  steady one &mdash; that shows up cleanly in the data. But the premium on brilliance does not exist where it was
+  expected to be.</p>
+  <p>Manning's best plays are genuinely better: his 95th-percentile dropback is worth <span class="num">+0.52</span>
+  EPA more than Stockton's. He pays <strong>roughly three times that</strong> back in bad snaps. In the highest-leverage
+  quartile of 2025 he was <span class="num">&minus;0.13</span> EPA per play while Stockton was
+  <span class="num">+0.66</span>. And across five seasons of real comeback attempts, having a fatter tail does not
+  predict completing a comeback at all.</p>
+</div>
+
+<div class="tiles" id="tiles"></div>
+
+<section>
+  <div class="sec-head"><h2>Where the two differ</h2><span class="tag">SHIFT FUNCTION &middot; 2025</span></div>
+  <figure>
+    <div class="chart"><div id="shift"></div></div>
+    <figcaption>Manning minus Stockton at each quantile of per-dropback EPA, with 95% game-clustered bootstrap bands.
+    FCS opponents removed. Above the line, Manning is better at that point in the distribution; below it, Stockton is.</figcaption>
+  </figure>
+  <div class="read">
+    <p>This is the whole argument in one picture. Below the 70th percentile &mdash; the ordinary and bad snaps that make
+    up most of a season &mdash; Stockton is better at <em>every single quantile</em>. At the 95th percentile the line
+    crosses hard: Manning's elite play is the best thing either quarterback does.</p>
+    <p>That is the boom-bust signature, stated precisely. It is also why comparing averages tells you nothing here:
+    the two means differ by <span class="num">0.098</span> EPA per play, and this sample could only reliably detect a
+    gap of <span class="num">0.476</span>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>What the shape costs</h2><span class="tag">MEAN GAP DECOMPOSED</span></div>
+  <figure>
+    <div class="chart"><div id="decomp"></div></div>
+    <figcaption>Each band contributes its frequency times its average value to a quarterback's mean. Bars show how much
+    each band adds to Manning's EPA per dropback relative to Stockton's.</figcaption>
+  </figure>
+  <div class="read">
+    <p>Manning wins the tail and loses everywhere else. The brilliance is real and it is worth
+    <span class="num">+0.048</span> EPA per dropback. The floor costs him <span class="num">&minus;0.100</span> and the
+    routine middle another <span class="num">&minus;0.046</span>.</p>
+    <p>He is in the bad band on <span class="num">45.1%</span> of dropbacks against Stockton's
+    <span class="num">39.0%</span>, and in the disaster band <span class="num">11.3%</span> against
+    <span class="num">8.9%</span>. Put plainly: <strong>the highlight reel is paid for about three times over.</strong></p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>When it mattered most</h2><span class="tag">LEVERAGE QUARTILES &middot; 2025</span></div>
+  <figure>
+    <div class="chart"><div id="lev"></div></div>
+    <figcaption>EPA per dropback by leverage quartile. Leverage is estimated league-wide from win-probability swings by
+    game state across 370,022 plays, so neither quarterback's own play can inflate his own bucket.</figcaption>
+  </figure>
+  <div class="read">
+    <p>This is the result that most contradicts the intuition. In the snaps that decided games, the ordering reverses
+    and widens: Stockton <span class="num">+0.66</span>, Manning <span class="num">&minus;0.13</span>.</p>
+    <p>It is not an artifact of who got more chances. A permutation test shuffles each quarterback's outcomes across his
+    <em>own</em> situations, holding his opportunity mix exactly fixed. Stockton's leverage&ndash;outcome coupling comes
+    back significant (<span class="num">p&nbsp;=&nbsp;0.010</span>); Manning's is indistinguishable from random
+    (<span class="num">p&nbsp;=&nbsp;0.958</span>). Manning actually faced <em>higher</em> average leverage and still
+    finished 2025 at <span class="num">&minus;4.67</span> total win probability added against Stockton's
+    <span class="num">+0.51</span>.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>Does brilliance win comebacks?</h2><span class="tag">2,376 ATTEMPTS &middot; 2022&ndash;2026</span></div>
+  <figure>
+    <div class="chart"><div id="cb"></div></div>
+    <figcaption>Logistic model of comeback success for every FBS team trailing entering the fourth quarter across five
+    seasons. Coefficients are per standard deviation; bars are 95% confidence intervals on the odds ratio.</figcaption>
+  </figure>
+  <div class="read">
+    <p>Rather than argue from one game, the hypothesis was moved somewhere it can actually be tested: every FBS team that
+    trailed entering the fourth quarter since 2022 &mdash; 2,376 attempts, 156 completed comebacks.</p>
+    <p>Holding average passing efficiency constant, <strong>tail weight does not predict comebacks.</strong> The odds
+    ratio is <span class="num">0.85</span> with a 95% interval of <span class="num">0.60&ndash;1.21</span>, and the sign
+    flips at a deeper deficit threshold. Average efficiency is the stronger term. The interval is tight enough that this
+    is a genuine null rather than a shortage of data.</p>
+  </div>
+  <div class="tablewrap">
+    <table><thead><tr><th>Deficit entering Q4</th><th>Attempts</th><th>Comebacks</th><th>Rate</th></tr></thead>
+    <tbody id="cbrates"></tbody></table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>The Ohio State comeback</h2><span class="tag">SEP 12, 2026 &middot; TEXAS 24, OHIO STATE 23</span></div>
+  <figure>
+    <div class="chart"><div id="osu"></div></div>
+    <figcaption>Texas win probability through the fourth quarter (ESPN's model), one point per play. Segments are
+    colored by who was on the field: Manning dropbacks, designed runs, or Ohio State possessions.</figcaption>
+    <div class="legend">
+      <span><i class="swatch" style="background:var(--tex)"></i>Manning dropback</span>
+      <span><i class="swatch" style="background:var(--pos)"></i>Texas designed run</span>
+      <span><i class="swatch" style="background:var(--muted)"></i>Ohio State possession</span>
+    </div>
+  </figure>
+  <div class="read">
+    <p>Texas entered the fourth quarter down 23&ndash;3 with a <span class="num">4.7%</span> win probability and scored
+    21 unanswered. It is the game the whole question was built around &mdash; and it does not support the premise.</p>
+    <p><strong>Manning's 12 dropbacks produced 28% of Texas's fourth-quarter win-probability gain. The 15 designed runs
+    produced 72%.</strong> His single most valuable play was worth <span class="num">+0.059</span> &mdash; about a tenth
+    of the quarter's total. His line for the game was 23-of-37 for 196 yards at <span class="num">5.3</span> yards an
+    attempt with an interception.</p>
+    <p>This was a running comeback that a quarterback did not lose. Swapping in a different passer changes less than it
+    feels like it should, because the passer was not the binding constraint. For scale: a 20-point fourth-quarter
+    deficit was erased <strong>6 times in 928 attempts</strong> over five seasons.</p>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>2026 so far</h2><span class="tag">THREE GAMES &middot; HANDLE WITH CARE</span></div>
+  <div class="read">
+    <p>Stockton's 2026 line is spectacular &mdash; 38-of-45, 9 touchdowns, no interceptions, leading the nation in
+    efficiency. It came against Tennessee State (FCS), Western Kentucky and Arkansas in 63&ndash;3, 70&ndash;20 and
+    45&ndash;17 blowouts, and he was pulled early in each. Manning's three games include the No. 1 team in the country.</p>
+    <p>Weighting each season by its precision, <strong>2026 deserves about 11% of the weight for Stockton and 21% for
+    Manning.</strong> It moves the picture barely at all, and that is the honest reading rather than a hedge.</p>
+  </div>
+  <div class="tablewrap">
+    <table><thead><tr><th>Quarterback</th><th>2025 EPA/db</th><th>n</th><th>2026 EPA/db</th><th>n</th><th>2026 weight</th><th>Combined</th></tr></thead>
+    <tbody id="wt"></tbody></table>
+  </div>
+</section>
+
+<section>
+  <div class="sec-head"><h2>What this cannot tell you</h2><span class="tag">LIMITS</span></div>
+  <div class="caveat"><ul>
+    <li><strong>Receiver drops are not in any free data.</strong> Zero occurrences across 375,000 plays &mdash; drops are
+    a charting judgment only PFF and Sports Info Solutions record. Manning reportedly suffered 21 in 2025, fourth-most
+    among SEC quarterbacks, with Ryan Wingo at an 11.5% drop rate. <em>No equivalent figure exists for Georgia</em>, so
+    adjusting one side and not the other would simply manufacture a conclusion. Treat the drop story as real context for
+    Manning that cannot be applied symmetrically.</li>
+    <li><strong>Adjusted completion percentage could not be computed.</strong> Every component of its denominator &mdash;
+    drops, throwaways, batted balls, spikes &mdash; is absent from the public feed.</li>
+    <li><strong>Pressure is only a lower bound.</strong> The scorer-credited &ldquo;QB hurried&rdquo; tag fires on about
+    3% of plays and is credited inconsistently by venue (Manning 3.7%, Stockton 1.7% &mdash; almost certainly scorer
+    variation, not a real 2&times; gap). PFF charts true pressure at roughly 35% of dropbacks.</li>
+    <li><strong>Quarterback and team are collinear.</strong> Each played essentially all of his team's snaps, so nothing
+    here cleanly separates the quarterback from his line, scheme and receivers. Texas's 2025 line allowed 23 sacks and
+    pressure on close to 40% of dropbacks; its 2026 line grades among the best in the country.</li>
+    <li><strong>One season of clutch is not a trait.</strong> Leverage residuals are famously unstable year to year.
+    Stockton's p&nbsp;=&nbsp;0.010 is one test among several run here and should be read as descriptive of 2025.</li>
+    <li><strong>Two published data sources were unusable and were replaced.</strong> The bulk feed's win-probability
+    columns are corrupted (routine plays swing win probability 30+ points on 5.8% of 2025 snaps and 12.7% of 2026 snaps);
+    its EPA is sound and is used as shipped. Win probability here comes from a model fit for this study across 370,022
+    plays, calibrated out of fold to a Brier score of 0.154 against a 0.250 baseline.</li>
+  </ul></div>
+</section>
+
+<footer>
+  <p>Play-by-play from the cfbfastR bulk release (2022&ndash;2026); win probability for the Ohio State game from ESPN.
+  Attribution parsed from play text and validated against official season lines &mdash; Manning 404 attempts against an
+  official 404, Stockton 385 against 386, sacks exact for both. All intervals are game-clustered bootstraps.</p>
+</footer>
+</div>
+
+<script>
+const D = {"shift": [{"quantile": 0.05, "a": -1.994, "b": -1.893, "diff": -0.101, "lo": -0.76, "hi": 0.471}, {"quantile": 0.1, "a": -1.598, "b": -1.379, "diff": -0.218, "lo": -0.563, "hi": 0.126}, {"quantile": 0.15, "a": -1.239, "b": -1.084, "diff": -0.155, "lo": -0.451, "hi": 0.115}, {"quantile": 0.2, "a": -1.071, "b": -0.92, "diff": -0.151, "lo": -0.291, "hi": 0.078}, {"quantile": 0.25, "a": -0.934, "b": -0.804, "diff": -0.13, "lo": -0.319, "hi": 0.074}, {"quantile": 0.3, "a": -0.815, "b": -0.716, "diff": -0.099, "lo": -0.305, "hi": 0.062}, {"quantile": 0.35, "a": -0.722, "b": -0.593, "diff": -0.129, "lo": -0.332, "hi": 0.089}, {"quantile": 0.4, "a": -0.618, "b": -0.465, "diff": -0.153, "lo": -0.386, "hi": 0.063}, {"quantile": 0.45, "a": -0.501, "b": -0.334, "diff": -0.167, "lo": -0.52, "hi": 0.059}, {"quantile": 0.5, "a": -0.369, "b": -0.133, "diff": -0.236, "lo": -0.637, "hi": 0.092}, {"quantile": 0.55, "a": -0.16, "b": 0.165, "diff": -0.325, "lo": -0.719, "hi": 0.101}, {"quantile": 0.6, "a": 0.035, "b": 0.354, "diff": -0.319, "lo": -0.689, "hi": 0.163}, {"quantile": 0.65, "a": 0.392, "b": 0.574, "diff": -0.182, "lo": -0.605, "hi": 0.324}, {"quantile": 0.7, "a": 0.754, "b": 0.806, "diff": -0.052, "lo": -0.452, "hi": 0.381}, {"quantile": 0.75, "a": 1.089, "b": 1.012, "diff": 0.078, "lo": -0.336, "hi": 0.414}, {"quantile": 0.8, "a": 1.403, "b": 1.351, "diff": 0.052, "lo": -0.405, "hi": 0.441}, {"quantile": 0.85, "a": 1.861, "b": 1.87, "diff": -0.009, "lo": -0.392, "hi": 0.374}, {"quantile": 0.9, "a": 2.453, "b": 2.439, "diff": 0.014, "lo": -0.438, "hi": 0.438}, {"quantile": 0.95, "a": 3.424, "b": 2.905, "diff": 0.519, "lo": -0.252, "hi": 0.781}], "dist": [{"season": 2025, "qb": "Manning", "n": 426, "games": 13, "mean": 0.0772, "mean_lo": -0.1398, "mean_hi": 0.3132, "median": -0.3689, "sd": 1.7641, "negative_rate": 0.5822, "bad_rate": 0.4507, "disaster_rate": 0.1127, "p90": 2.453, "p95": 3.4237, "p99": 4.7412, "explosive_rate": 0.2629, "big_rate": 0.1432, "huge_rate": 0.0634, "top1pct_share": 0.0859, "top1pct_mean": 6.3982, "top5pct_share": 0.3082, "top5pct_mean": 4.3707, "top10pct_share": 0.5208, "top10pct_mean": 3.6062, "oos_exceed_rate": 0.0546, "oos_tail_mean": 4.3348}, {"season": 2025, "qb": "Stockton", "n": 369, "games": 13, "mean": 0.1753, "mean_lo": 0.0308, "mean_hi": 0.3268, "median": -0.1331, "sd": 1.5824, "negative_rate": 0.5122, "bad_rate": 0.3902, "disaster_rate": 0.0894, "p90": 2.4386, "p95": 2.9049, "p99": 4.3914, "explosive_rate": 0.252, "big_rate": 0.1409, "huge_rate": 0.0461, "top1pct_share": 0.0803, "top1pct_mean": 5.1393, "top5pct_share": 0.2726, "top5pct_mean": 3.8763, "top10pct_share": 0.4698, "top10pct_mean": 3.25, "oos_exceed_rate": 0.0543, "oos_tail_mean": 3.8483}, {"season": 2026, "qb": "Manning", "n": 104, "games": 3, "mean": 0.1574, "mean_lo": -0.2874, "mean_hi": 0.8602, "median": -0.1939, "sd": 1.6616, "negative_rate": 0.5577, "bad_rate": 0.4423, "disaster_rate": 0.1346, "p90": 2.1744, "p95": 2.8423, "p99": 4.4773, "explosive_rate": 0.2981, "big_rate": 0.1538, "huge_rate": 0.0481, "top1pct_share": 0.0603, "top1pct_mean": 4.6042, "top5pct_share": 0.274, "top5pct_mean": 4.1833, "top10pct_share": 0.4499, "top10pct_mean": 3.4344, "oos_exceed_rate": 0.0652, "oos_tail_mean": 3.952}, {"season": 2026, "qb": "Stockton", "n": 32, "games": 2, "mean": 0.3629, "mean_lo": -0.2793, "mean_hi": 1.0052, "median": 0.37, "sd": 1.7329, "negative_rate": 0.4062, "bad_rate": 0.375, "disaster_rate": 0.0938, "p90": 2.2442, "p95": 3.0978, "p99": 4.8439, "explosive_rate": 0.3438, "big_rate": 0.1562, "huge_rate": 0.0625, "top1pct_share": 0.1978, "top1pct_mean": 5.3466, "top5pct_share": 0.3356, "top5pct_mean": 4.5358, "top10pct_share": 0.4312, "top10pct_mean": 3.8854, "oos_exceed_rate": NaN, "oos_tail_mean": NaN}], "decomp": [{"band": "floor", "a": -0.5818, "a_share": 0.4507, "a_mean": -1.291, "b": -0.4821, "b_share": 0.3902, "b_mean": -1.2353, "contribution_diff": -0.0998, "season": 2025}, {"band": "middle", "a": 0.0339, "a_share": 0.2864, "a_mean": 0.1183, "b": 0.08, "b_share": 0.3577, "b_mean": 0.2236, "contribution_diff": -0.0461, "season": 2025}, {"band": "tail", "a": 0.6252, "a_share": 0.2629, "a_mean": 2.3779, "b": 0.5774, "b_share": 0.252, "b_mean": 2.291, "contribution_diff": 0.0478, "season": 2025}], "leverage": [{"bucket": "low", "plays": 133, "mean_epa": 0.0158, "mean_wpa": -0.0086, "mean_leverage": 0.393, "qb": "Manning", "season": 2025}, {"bucket": "medium", "plays": 96, "mean_epa": 0.2422, "mean_wpa": -0.0035, "mean_leverage": 0.4938, "qb": "Manning", "season": 2025}, {"bucket": "high", "plays": 95, "mean_epa": 0.2222, "mean_wpa": -0.0033, "mean_leverage": 0.7017, "qb": "Manning", "season": 2025}, {"bucket": "highest", "plays": 102, "mean_epa": -0.133, "mean_wpa": -0.0281, "mean_leverage": 1.6881, "qb": "Manning", "season": 2025}, {"bucket": "low", "plays": 108, "mean_epa": 0.0639, "mean_wpa": -0.0009, "mean_leverage": 0.3946, "qb": "Stockton", "season": 2025}, {"bucket": "medium", "plays": 94, "mean_epa": -0.0816, "mean_wpa": -0.0007, "mean_leverage": 0.4981, "qb": "Stockton", "season": 2025}, {"bucket": "high", "plays": 96, "mean_epa": 0.1973, "mean_wpa": 0.0132, "mean_leverage": 0.6963, "qb": "Stockton", "season": 2025}, {"bucket": "highest", "plays": 71, "mean_epa": 0.6553, "mean_wpa": -0.0085, "mean_leverage": 1.594, "qb": "Stockton", "season": 2025}], "perm": [{"season": 2025, "qb": "Manning", "observed_cov": -0.1027, "null_mean": -0.1048, "null_sd": 0.0445, "p_value": 0.958}, {"season": 2025, "qb": "Stockton", "observed_cov": 0.2125, "null_mean": 0.0828, "null_sd": 0.0504, "p_value": 0.0098}, {"season": 2026, "qb": "Manning", "observed_cov": 0.3728, "null_mean": 0.2982, "null_sd": 0.1227, "p_value": 0.5542}], "comeback_rates": [{"deficit": 7, "attempts": 2376, "comebacks": 156, "rate": 0.0657}, {"deficit": 10, "attempts": 1949, "comebacks": 77, "rate": 0.0395}, {"deficit": 14, "attempts": 1490, "comebacks": 26, "rate": 0.0174}, {"deficit": 17, "attempts": 1181, "comebacks": 15, "rate": 0.0127}, {"deficit": 20, "attempts": 928, "comebacks": 6, "rate": 0.0065}], "comeback_model": [{"deficit": 7, "term": "const", "coef": -3.9141, "se": 0.2103, "p": 0.0, "odds_ratio": 0.02, "or_lo": 0.0132, "or_hi": 0.0301, "n": 2279, "events": 151}, {"deficit": 7, "term": "pass_epa", "coef": 0.2964, "se": 0.1873, "p": 0.1136, "odds_ratio": 1.345, "or_lo": 0.9317, "or_hi": 1.9418, "n": 2279, "events": 151}, {"deficit": 7, "term": "pass_tail", "coef": -0.163, "se": 0.1815, "p": 0.3692, "odds_ratio": 0.8496, "or_lo": 0.5952, "or_hi": 1.2126, "n": 2279, "events": 151}, {"deficit": 7, "term": "rush_epa", "coef": -0.0164, "se": 0.0984, "p": 0.8679, "odds_ratio": 0.9838, "or_lo": 0.8113, "or_hi": 1.1929, "n": 2279, "events": 151}, {"deficit": 7, "term": "deficit", "coef": 1.928, "se": 0.2152, "p": 0.0, "odds_ratio": 6.8755, "or_lo": 4.5098, "or_hi": 10.4821, "n": 2279, "events": 151}, {"deficit": 7, "term": "is_home", "coef": 0.5981, "se": 0.1771, "p": 0.0007, "odds_ratio": 1.8186, "or_lo": 1.2852, "or_hi": 2.5734, "n": 2279, "events": 151}, {"deficit": 10, "term": "const", "coef": -4.4276, "se": 0.2904, "p": 0.0, "odds_ratio": 0.0119, "or_lo": 0.0068, "or_hi": 0.0211, "n": 1866, "events": 75}, {"deficit": 10, "term": "pass_epa", "coef": 0.0843, "se": 0.2442, "p": 0.7301, "odds_ratio": 1.0879, "or_lo": 0.6741, "or_hi": 1.7558, "n": 1866, "events": 75}, {"deficit": 10, "term": "pass_tail", "coef": 0.1756, "se": 0.2366, "p": 0.458, "odds_ratio": 1.192, "or_lo": 0.7496, "or_hi": 1.8954, "n": 1866, "events": 75}, {"deficit": 10, "term": "rush_epa", "coef": -0.0756, "se": 0.13, "p": 0.5608, "odds_ratio": 0.9272, "or_lo": 0.7187, "or_hi": 1.1962, "n": 1866, "events": 75}, {"deficit": 10, "term": "deficit", "coef": 1.828, "se": 0.2961, "p": 0.0, "odds_ratio": 6.2215, "or_lo": 3.4825, "or_hi": 11.1148, "n": 1866, "events": 75}, {"deficit": 10, "term": "is_home", "coef": 0.6387, "se": 0.2444, "p": 0.009, "odds_ratio": 1.894, "or_lo": 1.1731, "or_hi": 3.058, "n": 1866, "events": 75}], "power": {"sd": 1.6819, "n_per_side": 369, "design_effect": 1.8873, "se_diff": 0.1701, "mde_80pct": 0.4763, "observed_gap_2025": 0.0981}, "ladder": [{"season": 2025, "rung": "raw", "qb": "Manning", "n": 492, "mean_epa": 0.16, "lo": -0.0464, "hi": 0.3958}, {"season": 2025, "rung": "raw", "qb": "Stockton", "n": 515, "mean_epa": 0.1805, "lo": 0.0292, "hi": 0.3309}, {"season": 2025, "rung": "dropbacks", "qb": "Manning", "n": 426, "mean_epa": 0.0772, "lo": -0.1408, "hi": 0.3019}, {"season": 2025, "rung": "dropbacks", "qb": "Stockton", "n": 403, "mean_epa": 0.1657, "lo": 0.0315, "hi": 0.3005}, {"season": 2025, "rung": "dropbacks + FCS removed", "qb": "Manning", "n": 426, "mean_epa": 0.0772, "lo": -0.1361, "hi": 0.3081}, {"season": 2025, "rung": "dropbacks + FCS removed", "qb": "Stockton", "n": 369, "mean_epa": 0.1753, "lo": 0.0327, "hi": 0.325}, {"season": 2026, "rung": "raw", "qb": "Manning", "n": 120, "mean_epa": 0.1173, "lo": -0.2892, "hi": 0.8024}, {"season": 2026, "rung": "raw", "qb": "Stockton", "n": 53, "mean_epa": 0.4706, "lo": 0.1042, "hi": 0.8098}, {"season": 2026, "rung": "dropbacks", "qb": "Manning", "n": 104, "mean_epa": 0.1574, "lo": -0.2874, "hi": 0.8602}, {"season": 2026, "rung": "dropbacks", "qb": "Stockton", "n": 48, "mean_epa": 0.4314, "lo": -0.2793, "hi": 1.0052}, {"season": 2026, "rung": "dropbacks + FCS removed", "qb": "Manning", "n": 104, "mean_epa": 0.1574, "lo": -0.2874, "hi": 0.8602}, {"season": 2026, "rung": "dropbacks + FCS removed", "qb": "Stockton", "n": 32, "mean_epa": 0.3629, "lo": -0.2793, "hi": 1.0052}], "weights": [{"qb": "Manning", "mean_2025": 0.0772, "n_2025": 426, "mean_2026": 0.1574, "n_2026": 104, "weight_2026": 0.2064, "posterior": 0.0938}, {"qb": "Stockton", "mean_2025": 0.1753, "n_2025": 369, "mean_2026": 0.3629, "n_2026": 32, "weight_2026": 0.1137, "posterior": 0.1967}], "osu_q4": [{"i": 0, "wp": 0.0468, "clock": "14:55", "kind": "run", "text": "(15:00) No Huddle-Shotgun #2 H.Smothers rush right for 2 yards gain to the OSU03 (#96 E.Houston)", "dwp": 0.0191}, {"i": 1, "wp": 0.0659, "clock": "14:19", "kind": "manning", "text": "(14:24) No Huddle-Shotgun #16 A.Manning pass complete short left to #1 R.Wingo caught at OSU00, for 3 yards to", "dwp": -0.007}, {"i": 2, "wp": 0.0589, "clock": "14:19", "kind": "other", "text": "(14:19) #44 G.Spetic kickoff 65 yards to the OSU00, Touchback", "dwp": 0.006}, {"i": 3, "wp": 0.0649, "clock": "14:11", "kind": "osu", "text": "(14:19) Shotgun #25 B.Jackson rush left for 4 yards gain to the OSU29 (#14 B.Spence; #3 R.Biles)", "dwp": -0.0008}, {"i": 4, "wp": 0.0641, "clock": "13:27", "kind": "osu", "text": "(13:32) Shotgun #25 B.Jackson rush middle for 2 yards gain to the OSU31 (#4 J.McDonald; #95 I.Geffrard)", "dwp": 0.0145}, {"i": 5, "wp": 0.0786, "clock": "12:54", "kind": "osu", "text": "(12:57) Shotgun #10 J.Sayin pass incomplete short left to #4 J.Smith thrown to OSU35 broken up by #35 R.Anders", "dwp": -0.0048}, {"i": 6, "wp": 0.0738, "clock": "12:46", "kind": "osu", "text": "(12:54) #42 J.McGuire punt 41 yards to the TEX28 fair catch by #21 R.Niblett at TEX28", "dwp": 0.0015}, {"i": 7, "wp": 0.0753, "clock": "12:49", "kind": "manning", "text": "(12:46) No Huddle-Shotgun #16 A.Manning pass complete short left to #83 S.Shannon caught at TEX32, for 4 yards", "dwp": -0.0137}, {"i": 8, "wp": 0.0616, "clock": "12:15", "kind": "run", "text": "(12:20) No Huddle-Shotgun #2 H.Smothers rush left for 0 yards to the TEX32 (#2 K.Jackson Jr.; #4 Q.Russaw)", "dwp": -0.0213}, {"i": 9, "wp": 0.0403, "clock": "11:45", "kind": "manning", "text": "(11:51) No Huddle-Shotgun #16 A.Manning pass incomplete short middle to #83 S.Shannon thrown to TEX40", "dwp": 0.0015}, {"i": 10, "wp": 0.0418, "clock": "11:45", "kind": "osu", "text": "Timeout Ohio State, clock 11:45", "dwp": 0.0403}, {"i": 11, "wp": 0.0821, "clock": "11:34", "kind": "manning", "text": "(11:45) No Huddle-Shotgun #16 A.Manning pass complete short middle to #3 E.Mosley V caught at TEX44, for 12 ya", "dwp": 0.012}, {"i": 12, "wp": 0.0941, "clock": "11:08", "kind": "run", "text": "(11:14) No Huddle-Shotgun #2 H.Smothers rush middle for 11 yards gain to the OSU45 (#55 J.Walker), 1ST DOWN", "dwp": -0.0153}, {"i": 13, "wp": 0.0788, "clock": "10:46", "kind": "run", "text": "(10:51) No Huddle-Shotgun #2 H.Smothers rush middle for 1 yard gain to the OSU44 (#55 J.Walker)", "dwp": 0.0063}, {"i": 14, "wp": 0.0851, "clock": "10:13", "kind": "manning", "text": "(10:20) No Huddle-Shotgun #16 A.Manning rush left for 8 yards gain to the OSU36 (#26 P.Pierce), out of bounds", "dwp": 0.0066}, {"i": 15, "wp": 0.0917, "clock": "9:48", "kind": "run", "text": "(09:54) No Huddle-Shotgun #0 R.Brown rush middle for 5 yards gain to the OSU31 (#14 C.Alliegro; #7 J.Mathews J", "dwp": 0.0223}, {"i": 16, "wp": 0.114, "clock": "9:05", "kind": "manning", "text": "(09:21) No Huddle #16 A.Manning pass complete short right to #8 C.Coleman caught at OSU15, for 16 yards to the", "dwp": -0.0068}, {"i": 17, "wp": 0.1072, "clock": "8:37", "kind": "manning", "text": "(08:44) No Huddle #16 A.Manning pass incomplete short middle to #0 R.Brown thrown to OSU13 QB hurried by #94 J", "dwp": 0.0505}, {"i": 18, "wp": 0.1577, "clock": "8:26", "kind": "run", "text": "(08:37) No Huddle #0 R.Brown rush middle for 12 yards gain to the OSU03 (#8 J.McClain), 1ST DOWN", "dwp": -0.0156}, {"i": 19, "wp": 0.1421, "clock": "7:47", "kind": "run", "text": "(07:52) No Huddle #0 R.Brown rush right for 2 yards gain to the OSU01 (#17 T.Alford)", "dwp": 0.0568}, {"i": 20, "wp": 0.1989, "clock": "7:14", "kind": "run", "text": "(07:17) #2 H.Smothers rush left for 1 yard gain to the OSU00 TOUCHDOWN, clock 07:14 #44 G.Spetic kick attempt ", "dwp": -0.015}, {"i": 21, "wp": 0.1839, "clock": "7:14", "kind": "other", "text": "(07:14) #44 G.Spetic kickoff 65 yards to the OSU00, Touchback", "dwp": 0.032}, {"i": 22, "wp": 0.2159, "clock": "7:10", "kind": "osu", "text": "(07:14) Shotgun #10 J.Sayin pass incomplete short left to #4 J.Smith thrown to OSU40", "dwp": -0.0849}, {"i": 23, "wp": 0.131, "clock": "6:50", "kind": "osu", "text": "(07:10) Shotgun #10 J.Sayin pass complete deep left to #83 N.Roberts caught at OSU49, for 24 yards to the OSU4", "dwp": -0.0235}, {"i": 24, "wp": 0.1075, "clock": "6:20", "kind": "osu", "text": "(06:20) Shotgun #10 J.Sayin pass incomplete short left to #83 N.Roberts thrown to TEX43 PENALTY TEX Pass Inter", "dwp": -0.0243}, {"i": 25, "wp": 0.0832, "clock": "6:05", "kind": "osu", "text": "(06:13) Shotgun #25 B.Jackson rush middle for 11 yards gain to the TEX33 (#3 R.Biles), 1ST DOWN", "dwp": -0.0256}, {"i": 26, "wp": 0.0576, "clock": "5:23", "kind": "osu", "text": "(05:32) Shotgun #24 J.Jackson rush middle for 7 yards gain to the TEX26 (#19 Z.Umeozulu; #4 J.McDonald)", "dwp": 0.0145}, {"i": 27, "wp": 0.0721, "clock": "5:04", "kind": "osu", "text": "(05:08) Shotgun #25 B.Jackson rush left for 1 yard loss to the TEX27 (#28 J.Cryer; #19 Z.Umeozulu)", "dwp": 0.0354}, {"i": 28, "wp": 0.1075, "clock": "4:21", "kind": "osu", "text": "(04:27) Shotgun #10 J.Sayin pass incomplete deep right to #4 J.Smith thrown to TEX02", "dwp": 0.0958}, {"i": 29, "wp": 0.2033, "clock": "4:16", "kind": "osu", "text": "(04:21) #96 C.Hawkins field goal attempt from 45 yards NO GOOD (H: #42 J.McGuire, LS: #55 D.Riggs), clock 04:1", "dwp": -0.0117}, {"i": 30, "wp": 0.1916, "clock": "4:10", "kind": "run", "text": "(04:15) No Huddle-Shotgun #0 R.Brown rush middle for 2 yards gain to the TEX29 (#94 J.Moore; #53 W.Smith Jr.)", "dwp": 0.0635}, {"i": 31, "wp": 0.2551, "clock": "3:38", "kind": "manning", "text": "(03:49) No Huddle-Shotgun #16 A.Manning pass complete short left to #3 E.Mosley V caught at TEX39, for 17 yard", "dwp": -0.0096}, {"i": 32, "wp": 0.2455, "clock": "3:17", "kind": "manning", "text": "(03:20) No Huddle-Shotgun #16 A.Manning pass complete short right to #3 E.Mosley V caught at TEX44, for 4 yard", "dwp": 0.0389}, {"i": 33, "wp": 0.2844, "clock": "2:46", "kind": "run", "text": "(02:55) No Huddle-Shotgun #0 R.Brown rush right for 11 yards gain to the OSU39 (#6 D.Sanchez), 1ST DOWN", "dwp": -0.0329}, {"i": 34, "wp": 0.2515, "clock": "2:19", "kind": "manning", "text": "(02:26) No Huddle-Shotgun #16 A.Manning pass incomplete short left to #0 R.Brown thrown to OSU45", "dwp": 0.0595}, {"i": 35, "wp": 0.311, "clock": "2:02", "kind": "manning", "text": "(02:19) No Huddle-Shotgun #16 A.Manning pass complete short left to #85 E.Winston caught at OSU35, for 8 yards", "dwp": -0.0063}, {"i": 36, "wp": 0.3047, "clock": "2:00", "kind": "other", "text": "Timeout Texas, clock 02:00", "dwp": 0.051}, {"i": 37, "wp": 0.3557, "clock": "1:54", "kind": "run", "text": "(02:00) No Huddle-Shotgun #2 H.Smothers rush middle for 8 yards gain to the OSU23 (#26 P.Pierce), 1ST DOWN", "dwp": 0.0705}, {"i": 38, "wp": 0.4262, "clock": "1:30", "kind": "run", "text": "(01:34) No Huddle-Shotgun #2 H.Smothers rush middle for 3 yards gain to the OSU20 (#26 P.Pierce)", "dwp": 0.0008}, {"i": 39, "wp": 0.427, "clock": "1:30", "kind": "osu", "text": "Timeout Ohio State, clock 01:30", "dwp": 0.2896}, {"i": 40, "wp": 0.7166, "clock": "1:23", "kind": "manning", "text": "(01:30) No Huddle-Shotgun #16 A.Manning pass complete short right to #3 E.Mosley V caught at OSU15, for 19 yar", "dwp": 0.0351}, {"i": 41, "wp": 0.7517, "clock": "0:55", "kind": "run", "text": "(01:02) #2 H.Smothers rush middle for 0 yards to the OSU01 (#94 J.Moore; #26 P.Pierce)", "dwp": 0.0034}, {"i": 42, "wp": 0.7551, "clock": "0:53", "kind": "osu", "text": "Timeout Ohio State, clock 00:53", "dwp": -0.0214}, {"i": 43, "wp": 0.7337, "clock": "0:53", "kind": "run", "text": "(00:53) #2 H.Smothers rush middle for 0 yards to the OSU01 fumbled by #2 H.Smothers at OSU01 forced by #94 J.M", "dwp": 0.2014}, {"i": 44, "wp": 0.9351, "clock": "0:25", "kind": "run", "text": "(00:28) #2 H.Smothers rush middle for 1 yard gain to the OSU00 TOUCHDOWN, clock 00:25 #44 G.Spetic kick attemp", "dwp": 0.0639}, {"i": 45, "wp": 0.999, "clock": "0:25", "kind": "other", "text": "(00:25) #44 G.Spetic kickoff 65 yards to the OSU00, Touchback", "dwp": -0.011}, {"i": 46, "wp": 0.988, "clock": "0:25", "kind": "osu", "text": "(00:25) Shotgun #10 J.Sayin pass incomplete deep left to #3 D.McCuin thrown to TEX30 broken up by #4 J.McDonal", "dwp": 0.011}, {"i": 47, "wp": 0.999, "clock": "0:17", "kind": "other", "text": "Timeout Texas, clock 00:17", "dwp": 0.001}, {"i": 48, "wp": 1.0, "clock": "0:06", "kind": "osu", "text": "(00:17) Shotgun #10 J.Sayin pass complete short right to #3 D.McCuin caught at OSU20, for 5 yards to the OSU20", "dwp": -0.001}, {"i": 49, "wp": 0.999, "clock": "0:17", "kind": "osu", "text": "(00:00) Shotgun #10 J.Sayin pass intercepted by #29 G.Littleton at TEX40, End Of Play PENALTY OSU Ineligible D", "dwp": 0.001}, {"i": 50, "wp": 1.0, "clock": "0:00", "kind": "osu", "text": "End of 4th quarter.", "dwp": 0}], "osu_share": {"manning_plays": 12, "run_plays": 15, "manning_wp": 0.1607, "run_wp": 0.4079, "start_wp": 0.0468}};
+
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const fmt = (v,d=2) => (v>=0?'+':'−') + Math.abs(v).toFixed(d);
+const esc = s => s.replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+function svg(w,h){return `<svg viewBox="0 0 ${w} ${h}" role="img" preserveAspectRatio="xMidYMid meet">`}
+
+/* ---------- tiles ---------- */
+(function(){
+  const m = D.dist.find(r=>r.season===2025 && r.qb==='Manning');
+  const s = D.dist.find(r=>r.season===2025 && r.qb==='Stockton');
+  const t = [
+    ['95th pct dropback', fmt(m.p95-s.p95)+' EPA', 'Manning’s edge at his best'],
+    ['Bad-play rate', (m.bad_rate*100).toFixed(1)+'% v '+(s.bad_rate*100).toFixed(1)+'%', 'Manning is there more often'],
+    ['Highest-leverage EPA', fmt(-0.133)+' v '+fmt(0.655), 'Manning v Stockton, 2025'],
+    ['Tail’s effect on comebacks', '0.85×', 'odds ratio, 95% CI 0.60–1.21'],
+  ];
+  document.getElementById('tiles').innerHTML = t.map(([k,v,s2])=>
+    `<div class="tile"><div class="k">${k}</div><div class="v num">${v}</div><div class="s">${s2}</div></div>`).join('');
+})();
+
+/* ---------- shift function ---------- */
+(function(){
+  const W=880,H=340,L=56,R=22,T=22,B=44;
+  const d=D.shift, xs=d.map(r=>r.quantile);
+  const lo=Math.min(...d.map(r=>r.lo)), hi=Math.max(...d.map(r=>r.hi));
+  const pad=(hi-lo)*0.12, y0=lo-pad, y1=hi+pad;
+  const X=q=>L+((q-0.05)/0.90)*(W-L-R), Y=v=>T+(1-(v-y0)/(y1-y0))*(H-T-B);
+  let s=svg(W,H);
+  // zero rule
+  s+=`<line x1="${L}" x2="${W-R}" y1="${Y(0)}" y2="${Y(0)}" stroke="${css('--ink')}" stroke-width="1.4"/>`;
+  // y grid + labels
+  for(let v=Math.ceil(y0*4)/4; v<=y1; v+=0.25){
+    if(Math.abs(v)<1e-9) continue;
+    s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--rule-soft')}" stroke-width="1"/>`;
+    s+=`<text x="${L-9}" y="${Y(v)+4}" text-anchor="end" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">${v.toFixed(2)}</text>`;
+  }
+  // band
+  const up=d.map(r=>`${X(r.quantile)},${Y(r.hi)}`).join(' ');
+  const dn=d.slice().reverse().map(r=>`${X(r.quantile)},${Y(r.lo)}`).join(' ');
+  s+=`<polygon points="${up} ${dn}" fill="${css('--tex')}" opacity="0.13"/>`;
+  // line
+  s+=`<polyline points="${d.map(r=>`${X(r.quantile)},${Y(r.diff)}`).join(' ')}" fill="none" stroke="${css('--tex')}" stroke-width="2.4" stroke-linejoin="round"/>`;
+  d.forEach(r=>{ s+=`<circle cx="${X(r.quantile)}" cy="${Y(r.diff)}" r="3.4" fill="${css('--tex')}" stroke="${css('--panel')}" stroke-width="1.5"/>`; });
+  // x labels
+  [0.05,0.25,0.50,0.75,0.95].forEach(q=>{
+    s+=`<text x="${X(q)}" y="${H-22}" text-anchor="middle" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">${q.toFixed(2)}</text>`;
+  });
+  s+=`<text x="${(L+W-R)/2}" y="${H-5}" text-anchor="middle" font-size="11.5" fill="${css('--muted')}">quantile of per-dropback EPA</text>`;
+  // side annotations
+  s+=`<text x="${L+6}" y="${T+14}" font-size="11.5" font-family="${css('--mono')}" fill="${css('--tex')}">Manning better ↑</text>`;
+  s+=`<text x="${L+6}" y="${H-B-6}" font-size="11.5" font-family="${css('--mono')}" fill="${css('--uga')}">Stockton better ↓</text>`;
+  // annotate the crossover
+  const last=d[d.length-1];
+  s+=`<line x1="${X(last.quantile)}" y1="${Y(last.diff)-10}" x2="${X(last.quantile)-58}" y2="${Y(last.diff)-40}" stroke="${css('--muted')}" stroke-width="1"/>`;
+  s+=`<text x="${X(last.quantile)-62}" y="${Y(last.diff)-44}" text-anchor="end" font-size="12" font-weight="600" fill="${css('--ink')}">${fmt(last.diff)} at the 95th</text>`;
+  document.getElementById('shift').innerHTML=s+'</svg>';
+})();
+
+/* ---------- decomposition ---------- */
+(function(){
+  const W=880,H=230,L=120,R=90,T=18,B=40;
+  const d=D.decomp.filter(r=>r.season===2025);
+  const labels={floor:'Floor  (EPA < −0.5)',middle:'Middle',tail:'Tail  (EPA > +1)'};
+  const mx=Math.max(...d.map(r=>Math.abs(r.contribution_diff)))*1.35;
+  const X=v=>L+(W-L-R)/2+(v/mx)*((W-L-R)/2);
+  const bh=34, gap=18;
+  let s=svg(W,H);
+  s+=`<line x1="${X(0)}" x2="${X(0)}" y1="${T}" y2="${T+d.length*(bh+gap)}" stroke="${css('--ink')}" stroke-width="1.4"/>`;
+  d.forEach((r,i)=>{
+    const y=T+i*(bh+gap), v=r.contribution_diff;
+    const x0=Math.min(X(0),X(v)), w=Math.abs(X(v)-X(0));
+    const col = v>=0 ? css('--tex') : css('--uga');
+    s+=`<rect x="${x0}" y="${y}" width="${w}" height="${bh}" rx="2" fill="${col}"/>`;
+    s+=`<text x="${L-14}" y="${y+bh/2+4}" text-anchor="end" font-size="12.5" fill="${css('--ink-2')}">${labels[r.band]}</text>`;
+    const tx = v>=0 ? X(v)+9 : X(v)-9;
+    s+=`<text x="${tx}" y="${y+bh/2+4}" text-anchor="${v>=0?'start':'end'}" font-size="12.5" font-weight="600" font-family="${css('--mono')}" fill="${css('--ink')}">${fmt(v,3)}</text>`;
+  });
+  const yb=T+d.length*(bh+gap)+18;
+  s+=`<text x="${X(0)-10}" y="${yb}" text-anchor="end" font-size="11.5" fill="${css('--uga')}">← favours Stockton</text>`;
+  s+=`<text x="${X(0)+10}" y="${yb}" text-anchor="start" font-size="11.5" fill="${css('--tex')}">favours Manning →</text>`;
+  document.getElementById('decomp').innerHTML=s+'</svg>';
+})();
+
+/* ---------- leverage ---------- */
+(function(){
+  const W=880,H=310,L=56,R=22,T=22,B=56;
+  const order=['low','medium','high','highest'];
+  const rows=order.map(b=>({b,
+    m:D.leverage.find(r=>r.qb==='Manning'&&r.bucket===b),
+    s:D.leverage.find(r=>r.qb==='Stockton'&&r.bucket===b)}));
+  const vals=rows.flatMap(r=>[r.m.mean_epa,r.s.mean_epa]);
+  const y1=Math.max(...vals)*1.25, y0=Math.min(...vals)*1.45;
+  const Y=v=>T+(1-(v-y0)/(y1-y0))*(H-T-B);
+  const cw=(W-L-R)/order.length, bw=Math.min(52,cw/2.8);
+  let s=svg(W,H);
+  for(let v=Math.ceil(y0*4)/4; v<=y1; v+=0.25){
+    s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${Math.abs(v)<1e-9?css('--ink'):css('--rule-soft')}" stroke-width="${Math.abs(v)<1e-9?1.4:1}"/>`;
+    s+=`<text x="${L-9}" y="${Y(v)+4}" text-anchor="end" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">${v.toFixed(2)}</text>`;
+  }
+  rows.forEach((r,i)=>{
+    const cx=L+cw*i+cw/2;
+    [[r.m,css('--tex'),-1],[r.s,css('--uga'),1]].forEach(([rec,col,side])=>{
+      const v=rec.mean_epa, x=cx+side*3-(side<0?bw:0);
+      const yT=Math.min(Y(v),Y(0)), h=Math.abs(Y(v)-Y(0));
+      s+=`<rect x="${x}" y="${yT}" width="${bw}" height="${Math.max(h,1.5)}" rx="2" fill="${col}"/>`;
+      const ly = v>=0 ? Y(v)-7 : Y(v)+15;
+      s+=`<text x="${x+bw/2}" y="${ly}" text-anchor="middle" font-size="11.5" font-weight="600" font-family="${css('--mono')}" fill="${css('--ink')}">${fmt(v)}</text>`;
+    });
+    s+=`<text x="${cx}" y="${H-32}" text-anchor="middle" font-size="12.5" fill="${css('--ink-2')}">${r.b}</text>`;
+    s+=`<text x="${cx}" y="${H-17}" text-anchor="middle" font-size="10.5" font-family="${css('--mono')}" fill="${css('--muted')}">n=${r.m.plays}/${r.s.plays}</text>`;
+  });
+  s+=`<text x="${(L+W-R)/2}" y="${H-3}" text-anchor="middle" font-size="11.5" fill="${css('--muted')}">leverage quartile → most decisive snaps at right</text>`;
+  document.getElementById('lev').innerHTML=s+'</svg>';
+})();
+
+/* ---------- comeback model ---------- */
+(function(){
+  const W=880,H=210,L=190,R=70,T=24,B=44;
+  const want={pass_tail:'Tail weight (boom rate)',pass_epa:'Average pass efficiency',rush_epa:'Run-game strength',is_home:'Home field'};
+  const d=D.comeback_model.filter(r=>r.deficit===7 && want[r.term]);
+  const lo=Math.min(...d.map(r=>r.or_lo)), hi=Math.max(...d.map(r=>r.or_hi));
+  const X=v=>L+((Math.log(v)-Math.log(lo*0.92))/(Math.log(hi*1.08)-Math.log(lo*0.92)))*(W-L-R);
+  const rh=34;
+  let s=svg(W,H);
+  s+=`<line x1="${X(1)}" x2="${X(1)}" y1="${T-6}" y2="${T+d.length*rh}" stroke="${css('--ink')}" stroke-width="1.4" stroke-dasharray="3 3"/>`;
+  s+=`<text x="${X(1)}" y="${T-11}" text-anchor="middle" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">no effect</text>`;
+  d.forEach((r,i)=>{
+    const y=T+i*rh+rh/2;
+    const sig = r.p<0.05;
+    const col = r.term==='pass_tail' ? css('--tex') : (sig?css('--pos'):css('--muted'));
+    s+=`<line x1="${X(r.or_lo)}" x2="${X(r.or_hi)}" y1="${y}" y2="${y}" stroke="${col}" stroke-width="2.4" opacity="0.55"/>`;
+    s+=`<circle cx="${X(r.odds_ratio)}" cy="${y}" r="5.5" fill="${col}" stroke="${css('--panel')}" stroke-width="1.6"/>`;
+    s+=`<text x="${L-14}" y="${y+4}" text-anchor="end" font-size="12.5" fill="${css('--ink-2')}">${want[r.term]}</text>`;
+    s+=`<text x="${W-R+8}" y="${y+4}" font-size="11.5" font-family="${css('--mono')}" fill="${css('--muted')}">p=${r.p.toFixed(2)}</text>`;
+  });
+  [0.6,0.8,1,1.5,2].forEach(v=>{
+    if(v<lo*0.92||v>hi*1.08) return;
+    s+=`<text x="${X(v)}" y="${H-20}" text-anchor="middle" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">${v}×</text>`;
+  });
+  s+=`<text x="${(L+W-R)/2}" y="${H-4}" text-anchor="middle" font-size="11.5" fill="${css('--muted')}">odds ratio per standard deviation, trailing 7+ entering Q4</text>`;
+  document.getElementById('cb').innerHTML=s+'</svg>';
+  document.getElementById('cbrates').innerHTML = D.comeback_rates.map(r=>
+    `<tr><td>${r.deficit}+ points</td><td class="n">${r.attempts.toLocaleString()}</td><td class="n">${r.comebacks}</td><td class="n">${(r.rate*100).toFixed(1)}%</td></tr>`).join('');
+})();
+
+/* ---------- Ohio State Q4 ---------- */
+(function(){
+  const W=880,H=300,L=52,R=26,T=24,B=48;
+  const d=D.osu_q4;
+  const X=i=>L+(i/(d.length-1))*(W-L-R), Y=v=>T+(1-v)*(H-T-B);
+  const colOf=k=>k==='manning'?css('--tex'):(k==='run'?css('--pos'):css('--muted'));
+  let s=svg(W,H);
+  [0,0.25,0.5,0.75,1].forEach(v=>{
+    s+=`<line x1="${L}" x2="${W-R}" y1="${Y(v)}" y2="${Y(v)}" stroke="${css('--rule-soft')}" stroke-width="1"/>`;
+    s+=`<text x="${L-9}" y="${Y(v)+4}" text-anchor="end" font-size="11" font-family="${css('--mono')}" fill="${css('--muted')}">${(v*100)|0}%</text>`;
+  });
+  for(let i=0;i<d.length-1;i++){
+    s+=`<line x1="${X(i)}" y1="${Y(d[i].wp)}" x2="${X(i+1)}" y2="${Y(d[i+1].wp)}" stroke="${colOf(d[i].kind)}" stroke-width="2.6" stroke-linecap="round"/>`;
+  }
+  d.forEach((p,i)=>{ if(p.kind==='manning'||p.kind==='run')
+    s+=`<circle cx="${X(i)}" cy="${Y(p.wp)}" r="3" fill="${colOf(p.kind)}" stroke="${css('--panel')}" stroke-width="1.2"/>`; });
+  const st=D.osu_share;
+  s+=`<text x="${L+4}" y="${Y(st.start_wp)-12}" font-size="12" font-weight="600" fill="${css('--ink')}">${(st.start_wp*100).toFixed(1)}% at the start of Q4</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-24}" text-anchor="middle" font-size="11.5" fill="${css('--muted')}">fourth-quarter plays, in order</text>`;
+  s+=`<text x="${(L+W-R)/2}" y="${H-7}" text-anchor="middle" font-size="12" font-weight="600" fill="${css('--ink')}">Manning ${(st.manning_wp/(st.manning_wp+st.run_wp)*100).toFixed(0)}% of Texas’s WP gain · designed runs ${(st.run_wp/(st.manning_wp+st.run_wp)*100).toFixed(0)}%</text>`;
+  document.getElementById('osu').innerHTML=s+'</svg>';
+})();
+
+/* ---------- weights table ---------- */
+document.getElementById('wt').innerHTML = D.weights.map(r=>
+  `<tr><td>${r.qb}</td><td class="n">${fmt(r.mean_2025,3)}</td><td class="n">${r.n_2025}</td>
+   <td class="n">${fmt(r.mean_2026,3)}</td><td class="n">${r.n_2026}</td>
+   <td class="n">${(r.weight_2026*100).toFixed(0)}%</td><td class="n win">${fmt(r.posterior,3)}</td></tr>`).join('');
+</script>
